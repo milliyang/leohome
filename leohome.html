@@ -1,8 +1,93 @@
 <html>
   <head>
+        <script type="text/javascript">
+        var c="Connecting to server."
+        var t
+        var rows = 0;
+        var wordCounter = 0;
+        var printWindowData = c;
+        var xmlHttp = null;
+        function timedCount()
+        {
+           printWindowData=printWindowData+"."
+           if(wordCounter >=99){
+             printWindowData=printWindowData+"\n"
+             wordCounter = 0
+           }
+          document.getElementById('printWindow').value=printWindowData
+           wordCounter +=1
+           t=setTimeout("timedCount()",1000)
+        }
+        function stopCount()
+         {
+              clearTimeout(t)
+              printWindowData  = c
+              document.getElementById('printWindow').value=printWindowData
+         }
+
+         function  getAndPrintForEver()
+         {
+                for (var i = 0; i <  100;  i=1) {
+                      text = httpGet("http://localhost:9090/")
+                      printWindowData +=  text
+                      document.getElementById('printWindow').value=printWindowData
+                      t=setTimeout("",1000)
+                }
+         }
+
+          function processRequest() 
+          {
+              if ( xmlHttp.readyState == 4 && xmlHttp.status == 200 ) 
+              {
+                  if ( xmlHttp.responseText == "Not found" ) 
+                  {
+                      document.getElementById( "printWindow"    ).value = "Not found";
+                  }
+                  else
+                  {
+                      var info = eval ( "(" + xmlHttp.responseText + ")" );     
+                      document.getElementById( "printWindow"    ).value = "??"
+                  }                    
+              }
+          }
+         function httpGet(theUrl)
+          {
+                  try {
+                                      xmlHttp  = new XMLHttpRequest();
+                                      xmlHttp.onreadystatechange = processRequest;
+                                      xmlHttp.open( "GET", "http://www.baidu.com/", false );
+                                      xmlHttp.setRequestHeader("Content-Type", "text/XML");
+                                      document.getElementById('printWindow').value="get"
+                                      xmlHttp.send( );
+                                      document.getElementById('printWindow').value="send"
+                          } catch (e) {
+                                  xmlHttp = false;
+                                  document.getElementById('printWindow').value="err"
+                          }
+                if(xmlHttp != false){
+                  document.getElementById('printWindow').value="Page is ok"
+                }
+          }
+
+
+          function initStart() 
+          {
+                var a =1
+          }
+
+          function load()
+          {
+          document.getElementById('printWindow').value="Page is loaded"
+          var i = document.createElement("img");
+          i.src = "http://localhost:9090/"
+          document.getElementById('printWindow').value=i.src
+          httpGet("home")
+          }
+        </script>
   </head>
-  <body>
-  	 <p>Search:</p>
+  <body  onload="load()">
+      <h1>Leo Home Page</h1>
+  	 <p>Search:</p><p></p>
   	 <p  note='Line01'>
 		<a href='http://www.baidu.com/' target="_blank" >Baidu</a> &nbsp;
 		<a href='http://www.google.com.hk' target="_blank">Google</a> &nbsp;
@@ -11,20 +96,37 @@
 		<a href='http://www.w3school.com.cn/tags/index.asp' target="_blank">Html w3c</a> &nbsp;
 		<a href='http://site.douban.com/123945/' target="_blank">DianYing</a> &nbsp;
   	</p>
+
+    <p>Email:</p>
+    <p  note='Line02'>
+      <a href='https://www.google.com/a/cpanel/imaginevision-tech.com/UserHub' target="_blank" >LeoIV</a> &nbsp;
+      <a href='http://mail.163.com/' target="_blank">163mail</a> &nbsp;
+    </p>
   	<p>yengine:</p>
-  	<p  note='Line02'>
+  	<p  note='Line03'>
 		<a href='http://localhost:8888' target="_blank" >home</a> &nbsp;
   	</p>
-
-
-
-
-
-
 
   	<p>Go Book:</p>
   	<p  note='Line02'>
-		<a href='http://localhost:8888' target="_blank" >home</a> &nbsp;
+          <a href='http://golang.org/' target="_blank">golang</a> &nbsp;
+          <a href='http://golang.org/project/' target="_blank">GoProject</a> &nbsp;
+          <a href='https://code.google.com/p/go-wiki/wiki/Projects' target="_blank">GoWikiProject</a> &nbsp;
+          <a href='https://code.google.com/p/golang-china/' target="_blank">golang-china</a> &nbsp;
+          <a href='http://golang.org/' target="_blank">..</a> &nbsp;
+          <a href='http://golang.org/' target="_blank">...</a> &nbsp;
+          <a href='https://github.com/astaxie/build-web-application-with-golang' target="_blank" >build-web-application-with-golang</a> &nbsp;
+          <a href='http://jan.newmarch.name/go/' target="_blank">Network programming with Go</a> &nbsp;
   	</p>
+
+      <form action="http://localhost:8888/login" method="post">
+            User:<input type="text" name="username">
+            Passcode:<input type="password" name="password">
+            <input type="submit" value="PressMe">
+      </form>
+    
+      <input type="button" value="Go !" onClick="timedCount()">
+      <input type="button" value="Stop !" onClick="stopCount()">
+      <textarea id=printWindow rows="10" cols="100">Connecting to server.</textarea>
   </body>
 </html>
