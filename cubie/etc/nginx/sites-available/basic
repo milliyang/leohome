@@ -1,0 +1,10 @@
+server {
+  listen  127.0.0.1:8001;
+  server_name  basic;
+  access_log  /var/log/nginx/basic.access.log;
+  error_log  /var/log/nginx/basic.error.log;
+  location  / {
+    root  /var/www/basic;
+    index  index.html index.htm;
+  }
+}
